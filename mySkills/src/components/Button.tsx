@@ -2,19 +2,27 @@ import React from "react";
 import {
     TouchableOpacity,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacityProps
 } from 'react-native';
 
-export function Button({ onPress }) { // Está pegando a propriedade onPress
+// type ButtonProps = TouchableOpacityProps;
+// Aqui em baixo está adicionando propriedades ao Touchable
+interface ButtonProps extends TouchableOpacityProps {
+    title: string
+}
+
+export function Button({ title, ...rest } : ButtonProps) { // Está pegando todas propriedades do Button, inclusive onPress
 
     return (
         <TouchableOpacity
             style={styles.button}
             activeOpacity={0.7}
-            onPress={ onPress } // Está chamando o onPress do parâmetro
+            //onPress={ onPress } // Está chamando o onPress do parâmetro
+            {...rest} // Está pegando qualquer propriedade que for chamada no button do arquivo de destino (Home)
             >
             <Text style={styles.buttonText}>
-                Add
+                { title }
             </Text>
         </TouchableOpacity>)
 }

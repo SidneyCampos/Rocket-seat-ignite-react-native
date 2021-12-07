@@ -17,14 +17,32 @@ import {
 import { Button } from '../components/Button';
 import { SkillCard } from '../components/SkillCard';
 
+// Interfaces, representação de dados - TYPESCRIPT
+interface SkillData {
+    id: string;
+    name: string;
+    //date?: Date; // ? tornando opcional
+}
+
 export /*default*/ function Home() { // Não eportar por Default para poder exportar várias coisas
     const [newSkill, setNewSkill] = useState(''); // (valor inicial para o state)
-    const [mySkills, setMySkills] = useState([]); // armazenar as skills, valor inicial aqui vetor
+    const [mySkills, setMySkills] = useState<SkillData[]>([]); // armazenar as skills, valor inicial aqui vetor //TSX o vetor virou um array de SkillData
     const [greeting, setGretting] = useState('');
     // newSkill é o estado em si
     // setNewSkill é a função que atualiza o estado
     function handleAddNewSkill() { // handle, convenção, quando a função é disparada através de uma interação do usuário - "Lidar"
-        setMySkills(oldState => [...oldState, newSkill]); // ... Spread Operator pra pegar o que já tinha no newSkill. Vai criar um novo array.
+        const data = { // OBJETO
+            id: String(new Date().getTime()), // no TYPESCRIPT sempre é usado id String para a key dos elementos
+            name: newSkill
+        }
+
+        setMySkills(oldState => [...oldState, data]); // ... Spread Operator pra pegar o que já tinha no newSkill. Vai criar um novo array.
+    }
+
+    function handleRemoveSkill(id: string){
+        setMySkills(oldState => oldState.filter(
+            skill => skill.id !== id // filtra as ids, recupera apenas as que forem diferentes do id do parâmetro
+        ));
     }
     // Indicar a função que ele deve executar
     // Indicar quais são as dependências
@@ -64,17 +82,20 @@ export /*default*/ function Home() { // Não eportar por Default para poder expo
                     onChangeText={setNewSkill}
                 />
 
-                <Button onPress={handleAddNewSkill} />
+                <Button title="Add" onPress={handleAddNewSkill} />
 
                 <Text style={[styles.title, { marginVertical: 50 }]}>
                     My skills
                 </Text>
 
                 <FlatList
-                    data={mySkills}
-                    keyExtractor={item => item} // Deixar cada filho único, obrigatório
+                    data={mySkills} // atributo obrigatório na FlatList
+                    keyExtractor={item => item.id} // Deixar cada filho único, obrigatório
                     renderItem={({ item }) => (
-                        <SkillCard skill={item} />
+                        <SkillCard 
+                        skill={item.name}
+                        onPress={() => handleRemoveSkill(item.id)}
+                        />
                     )}
                 />
 
