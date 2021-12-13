@@ -36,6 +36,8 @@ export /*default*/ function Home() { // Não eportar por Default para poder expo
             name: newSkill
         }
 
+        console.log("New Skill")
+
         setMySkills(oldState => [...oldState, data]); // ... Spread Operator pra pegar o que já tinha no newSkill. Vai criar um novo array.
     }
 
@@ -64,8 +66,6 @@ export /*default*/ function Home() { // Não eportar por Default para poder expo
         <Fragment>
 
             <View style={styles.container}>
-
-                
 
                 <Text style={styles.title}>
                     Welcome, Sidney Campos!
